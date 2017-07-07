@@ -21,6 +21,9 @@ string d(string u) {
 	else if (u == "x") {
 		return "1";
 	}
+	else if (u == "e") {
+		return "0";
+	}
 }
 ll findu(vector<expression*>& v, string a, ll j) {
 	for (ll i = j; i < v.size(); i++) {
@@ -161,11 +164,11 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 				break;
 			case 3:
 				k = substringg(v[i]->asl, 3);
-				v[i]->output = "(" + v[findu(v, k, i)]->output + ")*tan(1+" + v[findu(v, k, i)]->asl + ")";
+				v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(1+tan^2(" + v[findu(v, k, i)]->asl + "))";
 				break;
 			case 4:
 				k = substringg(v[i]->asl, 4);
-				v[i]->output = "-(" + v[findu(v, k, i)]->output + ")*tan(1+" + v[findu(v, k, i)]->asl + ")";
+				v[i]->output = "-(" + v[findu(v, k, i)]->output + ")*(1+cot^2(" + v[findu(v, k, i)]->asl + "))";
 				break;
 			case 5:
 				k = substringg(v[i]->asl, 5);
@@ -270,10 +273,10 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 				v[i]->output = "-(" + help[0]->output + ")*sin(" + help[0]->asl + ")";
 				break;
 			case 3:
-				v[i]->output = "(" + help[0]->output + ")*tan(1+" + help[0]->asl + ")";
+				v[i]->output = "(" + help[0]->output + ")*(1+tan^2(" + help[0]->asl + "))";
 				break;
 			case 4:
-				v[i]->output = "-(" + help[0]->output + ")*cot(1+" + help[0]->asl + ")";
+				v[i]->output = "-(" + help[0]->output + ")*(1+cot^2(" + help[0]->asl + "))";
 				break;
 			case 5:
 				v[i]->output = help[0]->output + "/2sqrt(" + help[0]->asl + ")";
@@ -317,11 +320,28 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 			case '^':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = v[findu(v, p, i)]->asl + k + "^" + to_string(stoi(v[findu(v, p, i)]->asl) - 1);
+				if (v[findu(v, k, i)]->asl == "e") {
+					if (isdig(v[findu(v, p, i)]->asl)) {
+						v[i]->output = "0";
+					}
+					else {
+						v[i]->output = v[findu(v, p, i)]->output + "*e^" + v[findu(v, p, i)]->asl;
+						v[i]->mosh = true;
+					}
+				}
+				else if (isdig(v[findu(v, k, i)]->asl)) {
+					if (isdig(v[findu(v, p, i)]->asl)) {
+						v[i]->output = "0";
+					}
+					else {
+						v[i]->output = v[findu(v, p, i)]->output + "*"+ k +"^" + v[findu(v, p, i)]->asl + "Ln" + k;
+						v[i]->mosh = true;
+					}
+				}
+				else if (isdig(v[findu(v, p, i)]->asl)) {
+					v[i]->output = v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + "*" + k + "^" + to_string(stoi(v[findu(v, p, i)]->asl) - 1);
 					v[i]->mosh = true;
 				}
-				
 				break;
 			case '*':
 				k = v[i]->asl.substr(0, v[i]->operi);
@@ -358,7 +378,6 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 string a;
 int main() {
 	read;
-	asdfsa
 	cin >> a;
 	FilStack f(a,qw);
 	moshtagh(qw, qw.size() - 1);

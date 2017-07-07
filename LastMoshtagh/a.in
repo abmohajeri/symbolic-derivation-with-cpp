@@ -1,1 +1,1 @@
-1/(x*x^2)
+sin(x)^2+cos(x)^2+(ln(x^2))+sin(x*tan(x))^2+cos(tan(x)*x)^2
