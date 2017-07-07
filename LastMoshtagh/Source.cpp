@@ -7,7 +7,7 @@ vector<expression*> help;
 
 bool isdig(string a) {
 	For(i, a.size()) {
-		if (!isdigit(a[i])) {
+		if (!isdigit(a[i]) && a[i] != '.') {
 			return false;
 		}
 	}
@@ -364,7 +364,7 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stoi(v[findu(v, p, i)]->asl) - 1) + ")";
+					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stold(v[findu(v, p, i)]->asl) - 1) + ")";
 					v[i]->mosh = true;
 				}
 				break;

@@ -146,7 +146,7 @@ c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\la
 c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(399): warning C4244: 'argument': conversion from 'll' to 'unsigned int', possible loss of data
 c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(410): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
-c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(34): warning C4715: 'findu': not all control paths return a value
 c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(27): warning C4715: 'd': not all control paths return a value
+c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(34): warning C4715: 'findu': not all control paths return a value
 c:\users\abolfazl mohajeri\documents\visual studio 2015\projects\lastmoshtagh\lastmoshtagh\source.cpp(79): warning C4715: 'findnotsplitt': not all control paths return a value
   LastMoshtagh.vcxproj -> C:\Users\Abolfazl Mohajeri\Documents\Visual Studio 2015\Projects\LastMoshtagh\Debug\LastMoshtagh.exe
