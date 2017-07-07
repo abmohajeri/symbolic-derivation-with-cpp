@@ -273,6 +273,27 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 		moshtaghfunc(help, i - 1);
 	}
 }
+string improvedstringstoled(string a) {
+	int b = a.size();
+	bool k = true;
+	for (int i = 1; i < b; i++) {
+		if (!a[i]) {
+			break;
+		}
+		if (a[i] == '.' || (a[i] == '0' && a[i + 1] == '.')) {
+			k = false;
+		}
+		else if (isdigit(a[i]) && a[i] != '0') {
+			k = true;
+		}
+		else if (a[i] == '0' && k) {
+			a.erase(i, 1);
+			b++;
+			i--;
+		}
+	}
+	return a;
+}
 void moshtagh(vector<expression*>& v, ll sizee) {
 	ll i = sizee;
 	if (i == -1) {
@@ -364,7 +385,7 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stold(v[findu(v, p, i)]->asl) - 1) + ")";
+					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + improvedstringstoled(to_string(stold(v[findu(v, p, i)]->asl) - 1)) + ")";
 					v[i]->mosh = true;
 				}
 				break;
