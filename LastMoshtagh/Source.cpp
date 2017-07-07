@@ -191,53 +191,78 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 			case '+':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				v[i]->output = v[findu(v, k, i)]->output + "+" + v[findu(v, p, i)]->output;
+				v[i]->output = "(" + v[findu(v, k, i)]->output + ")+(" + v[findu(v, p, i)]->output + ")";
 				v[i]->mosh = true;
 				break;
 			case '-':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
 				if (k == "") {
-					v[i]->output = "-" + v[findu(v, p, i)]->output;
+					v[i]->output = "-(" + v[findu(v, p, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				else if (p == "") {
-					v[i]->output = "-" + v[findu(v, k, i)]->output;
+					v[i]->output = "-(" + v[findu(v, k, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				else {
-					v[i]->output = v[findu(v, k, i)]->output + "-" + v[findu(v, p, i)]->output;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")-(" + v[findu(v, p, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				break;
 			case '^':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				v[i]->output = v[findu(v, p, i)]->asl + k + "^" + to_string(stoi(v[findu(v, p, i)]->asl) - 1);
-				v[i]->mosh = true;
+				if (v[findu(v, k, i)]->asl == "e") {
+					if (isdig(v[findu(v, p, i)]->asl)) {
+						v[i]->output = "0";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(e^" + v[findu(v, p, i)]->asl + ")";
+						v[i]->mosh = true;
+					}
+				}
+				else if (isdig(v[findu(v, k, i)]->asl)) {
+					if (isdig(v[findu(v, p, i)]->asl)) {
+						v[i]->output = "0";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(" + k + "^" + v[findu(v, p, i)]->asl + ")Ln(" + k + ")";
+						v[i]->mosh = true;
+					}
+				}
+				else if (isdig(v[findu(v, p, i)]->asl)) {
+					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stoi(v[findu(v, p, i)]->asl) - 1) + ")";
+					v[i]->mosh = true;
+				}
 				break;
 			case '*':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
 				if (v[findu(v, k, i)]->output == "0") {
-					v[i]->output = v[findu(v, p, i)]->output + "*" + v[findu(v, k, i)]->asl;
+					v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
 				}
 				else if (v[findu(v, p, i)]->output == "0") {
-					v[i]->output = v[findu(v, k, i)]->output + "*" + v[findu(v, p, i)]->asl;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")";
 				}
 				else {
-					v[i]->output = v[findu(v, k, i)]->output + "*" + v[findu(v, p, i)]->asl + "+" + v[findu(v, p, i)]->output + "*" + v[findu(v, k, i)]->asl;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
 				}
 				v[i]->mosh = true;
 				break;
 			case '/':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				if (v[findu(v, k, i)]->output == "0") {
-					v[i]->output = "-" + v[findu(v, p, i)]->output + "*" + k + "/" + p + "^2";
+				if (v[findu(v, k, i)]->output == "0" || v[findu(v, p, i)]->output == "0") {
+					if (v[findu(v, k, i)]->output == "0") {
+						v[i]->output = "-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")/(" + p + "^2)";
+					}
 				}
 				else {
-					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/" + p + "^2";
+					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
 				}
 				v[i]->mosh = true;
 				break;
@@ -279,10 +304,10 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 				v[i]->output = "-(" + help[0]->output + ")*(1+cot^2(" + help[0]->asl + "))";
 				break;
 			case 5:
-				v[i]->output = help[0]->output + "/2sqrt(" + help[0]->asl + ")";
+				v[i]->output = "(" + help[0]->output + ")/2sqrt(" + help[0]->asl + ")";
 				break;
 			case 6:
-				v[i]->output = help[0]->output + "/" + help[0]->asl ;
+				v[i]->output = "(" + help[0]->output + ")/(" + help[0]->asl + ")";
 				break;
 			default:
 				break;
@@ -298,22 +323,22 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 			case '+':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				v[i]->output = v[findu(v, k, i)]->output + "+" + v[findu(v, p, i)]->output;
+				v[i]->output = "(" + v[findu(v, k, i)]->output + ")+(" + v[findu(v, p, i)]->output + ")";
 				v[i]->mosh = true;
 				break;
 			case '-':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
 				if (k == "") {
-					v[i]->output = "-" + v[findu(v, p, i)]->output;
+					v[i]->output = "-(" + v[findu(v, p, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				else if (p == "") {
-					v[i]->output = "-" + v[findu(v, k, i)]->output;
+					v[i]->output = "-(" + v[findu(v, k, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				else {
-					v[i]->output = v[findu(v, k, i)]->output + "-" + v[findu(v, p, i)]->output;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")-(" + v[findu(v, p, i)]->output + ")";
 					v[i]->mosh = true;
 				}
 				break;
@@ -325,7 +350,7 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 						v[i]->output = "0";
 					}
 					else {
-						v[i]->output = v[findu(v, p, i)]->output + "*e^" + v[findu(v, p, i)]->asl;
+						v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(e^" + v[findu(v, p, i)]->asl + ")";
 						v[i]->mosh = true;
 					}
 				}
@@ -334,12 +359,12 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 						v[i]->output = "0";
 					}
 					else {
-						v[i]->output = v[findu(v, p, i)]->output + "*"+ k +"^" + v[findu(v, p, i)]->asl + "Ln" + k;
+						v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(" + k + "^" + v[findu(v, p, i)]->asl + ")Ln(" + k + ")";
 						v[i]->mosh = true;
 					}
 				}
 				else if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + "*" + k + "^" + to_string(stoi(v[findu(v, p, i)]->asl) - 1);
+					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stoi(v[findu(v, p, i)]->asl) - 1) + ")";
 					v[i]->mosh = true;
 				}
 				break;
@@ -347,24 +372,29 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
 				if (v[findu(v, k, i)]->output == "0") {
-					v[i]->output = v[findu(v, p, i)]->output + "*" + v[findu(v, k, i)]->asl;
+					v[i]->output = "(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
 				}
 				else if(v[findu(v, p, i)]->output == "0") {
-					v[i]->output = v[findu(v, k, i)]->output + "*" + v[findu(v, p, i)]->asl;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")";
 				}
 				else {
-					v[i]->output = v[findu(v, k, i)]->output + "*" + v[findu(v, p, i)]->asl + "+" + v[findu(v, p, i)]->output + "*" + v[findu(v, k, i)]->asl;
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
 				}
 				v[i]->mosh = true;
 				break;
 			case '/':
 				k = v[i]->asl.substr(0, v[i]->operi);
 				p = v[i]->asl.substr(v[i]->operi + 1, v[i]->asl.size());
-				if (v[findu(v, k, i)]->output == "0") {
-					v[i]->output = "-" + v[findu(v, p, i)]->output + "*" + k + "/" + p + "^2";
+				if (v[findu(v, k, i)]->output == "0" || v[findu(v, p, i)]->output == "0") {
+					if (v[findu(v, k, i)]->output == "0") {
+						v[i]->output = "-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")/(" + p + "^2)";
+					}
 				}
 				else {
-					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/" + p + "^2";
+					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
 				}
 				v[i]->mosh = true;
 				break;
