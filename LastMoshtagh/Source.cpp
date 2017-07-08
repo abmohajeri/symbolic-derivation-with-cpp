@@ -62,6 +62,15 @@ string substringg(string a,ll b) {
 	}
 	return shelp;
 }
+//tabe k 0 haye ezafi ashari ro hazf mikone
+string improvedstringstoled(string a) {
+	ll i = a.size() - 1;
+	while ((isdigit(a[i]) && a[i] == '0') || a[i] == '.') {
+		a.erase(i, 1);
+		i--;
+	}
+	return a;
+}
 bool issplitt(vector<expression*>& v) {
 	For(i, v.size()) {
 		if (!v[i]->splitfunc && v[i]->func != -1) {
@@ -146,7 +155,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 	}
 	else {
 		string t = v[i]->asl;
-		string k, p;
+		string k, p, g;
 		string shelp;
 		if (v[i]->func != -1) {
 			switch (v[i]->func) {
@@ -172,11 +181,11 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 				break;
 			case 5:
 				k = substringg(v[i]->asl, 5);
-				v[i]->output = v[findu(v, k, i)]->output + "/2sqrt(" + v[findu(v, k, i)]->asl + ")";
+				v[i]->output = "(" + v[findu(v, k, i)]->output + ")/(2*sqrt(" + v[findu(v, k, i)]->asl + "))";
 				break;
 			case 6:
 				k = substringg(v[i]->asl, 6);
-				v[i]->output = v[findu(v, k, i)]->output + "/" + v[findu(v, k, i)]->asl;
+				v[i]->output = "(" + v[findu(v, k, i)]->output + ")/(" + v[findu(v, k, i)]->asl + ")";
 				break;
 			default:
 				break;
@@ -246,7 +255,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")";
 				}
 				else {
-					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
+					v[i]->output = "((" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + "))";
 				}
 				v[i]->mosh = true;
 				break;
@@ -262,7 +271,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else {
-					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
+					v[i]->output = "(((" + v[findu(v, k, i)]->output + ")*" + p + ")-((" + v[findu(v, p, i)]->output + ")*" + k + "))/(" + p + "^2)";
 				}
 				v[i]->mosh = true;
 				break;
@@ -273,27 +282,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 		moshtaghfunc(help, i - 1);
 	}
 }
-string improvedstringstoled(string a) {
-	int b = a.size();
-	bool k = true;
-	for (int i = 1; i < b; i++) {
-		if (!a[i]) {
-			break;
-		}
-		if (a[i] == '.' || (a[i] == '0' && a[i + 1] == '.')) {
-			k = false;
-		}
-		else if (isdigit(a[i]) && a[i] != '0') {
-			k = true;
-		}
-		else if (a[i] == '0' && k) {
-			a.erase(i, 1);
-			b++;
-			i--;
-		}
-	}
-	return a;
-}
+
 void moshtagh(vector<expression*>& v, ll sizee) {
 	ll i = sizee;
 	if (i == -1) {
@@ -325,7 +314,8 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 				v[i]->output = "-(" + help[0]->output + ")*(1+cot^2(" + help[0]->asl + "))";
 				break;
 			case 5:
-				v[i]->output = "(" + help[0]->output + ")/2sqrt(" + help[0]->asl + ")";
+				//p = help[0]->asl.substr(help[0]->asl.rfind('^')+1);
+				v[i]->output = "(" + help[0]->output + ")/(2sqrt(" + help[0]->asl + "))";
 				break;
 			case 6:
 				v[i]->output = "(" + help[0]->output + ")/(" + help[0]->asl + ")";
@@ -415,7 +405,7 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else {
-					v[i]->output = "(" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + ")/(" + p + "^2)";
+					v[i]->output = "((" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + "))/(" + p + "^2)";
 				}
 				v[i]->mosh = true;
 				break;
