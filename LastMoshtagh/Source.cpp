@@ -7,11 +7,20 @@ vector<expression*> help;
 
 bool isdig(string a) {
 	For(i, a.size()) {
-		if (!isdigit(a[i]) && a[i] != '.') {
+		if (!isdigit(a[i]) && a[i] != '.' && a[i] != '/' && a[i] == 'x') {
 			return false;
 		}
 	}
 	return true;
+}
+//tabe k 0 haye ezafi ashari ro hazf mikone
+string improvedstringstoled(string a) {
+	ll i = a.size() - 1;
+	while ((isdigit(a[i]) && a[i] == '0') || a[i] == '.') {
+		a.erase(i, 1);
+		i--;
+	}
+	return a;
 }
 //moshtghe x ya adad
 string d(string u) {
@@ -23,6 +32,9 @@ string d(string u) {
 	}
 	else if (u == "e") {
 		return "0";
+	}
+	else {
+		return "y";
 	}
 }
 ll findu(vector<expression*>& v, string a, ll j) {
@@ -61,15 +73,6 @@ string substringg(string a,ll b) {
 		break;
 	}
 	return shelp;
-}
-//tabe k 0 haye ezafi ashari ro hazf mikone
-string improvedstringstoled(string a) {
-	ll i = a.size() - 1;
-	while ((isdigit(a[i]) && a[i] == '0') || a[i] == '.') {
-		a.erase(i, 1);
-		i--;
-	}
-	return a;
 }
 bool issplitt(vector<expression*>& v) {
 	For(i, v.size()) {
@@ -241,8 +244,16 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + to_string(stoi(v[findu(v, p, i)]->asl) - 1) + ")";
+					if (p != "x") {
+						v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + v[findu(v, p, i)]->asl + "-1)";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + improvedstringstoled(to_string(stold(v[findu(v, p, i)]->asl) - 1)) + ")";
+					}
 					v[i]->mosh = true;
+				}
+				else if (!isdig(v[findu(v, k, i)]->asl) && !isdig(v[findu(v, p, i)]->asl)) {
+					v[i]->output = "((" + v[findu(v, k, i)]->asl + "^" + v[findu(v, p, i)]->asl + ")*((" + v[findu(v, p, i)]->output + ")*Ln(" + v[findu(v, k, i)]->asl + ")" + "+((" + v[findu(v, k, i)]->output + "/" + v[findu(v, k, i)]->asl + ")*" + v[findu(v, p, i)]->asl + ")))";
 				}
 				break;
 			case '*':
@@ -255,7 +266,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")";
 				}
 				else {
-					v[i]->output = "((" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + "))";
+					v[i]->output = "(" + v[findu(v, k, i)]->output + ")*(" + v[findu(v, p, i)]->asl + ")+(" + v[findu(v, p, i)]->output + ")*(" + v[findu(v, k, i)]->asl + ")";
 				}
 				v[i]->mosh = true;
 				break;
@@ -271,7 +282,7 @@ void moshtaghfunc(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else {
-					v[i]->output = "(((" + v[findu(v, k, i)]->output + ")*" + p + ")-((" + v[findu(v, p, i)]->output + ")*" + k + "))/(" + p + "^2)";
+					v[i]->output = "((" + v[findu(v, k, i)]->output + "*" + p + ")-(" + v[findu(v, p, i)]->output + "*" + k + "))/(" + p + "^2)";
 				}
 				v[i]->mosh = true;
 				break;
@@ -375,8 +386,16 @@ void moshtagh(vector<expression*>& v, ll sizee) {
 					}
 				}
 				else if (isdig(v[findu(v, p, i)]->asl)) {
-					v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + improvedstringstoled(to_string(stold(v[findu(v, p, i)]->asl) - 1)) + ")";
+					if (p != "x") {
+						v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + v[findu(v, p, i)]->asl + "-1)";
+					}
+					else {
+						v[i]->output = "(" + v[findu(v, p, i)]->asl + "*" + v[findu(v, k, i)]->output + ")*(" + k + ")^(" + improvedstringstoled(to_string(stold(v[findu(v, p, i)]->asl) - 1)) + ")";
+					}
 					v[i]->mosh = true;
+				}
+				else if (!isdig(v[findu(v, k, i)]->asl) && !isdig(v[findu(v, p, i)]->asl)) {
+					v[i]->output = "((" + v[findu(v, k, i)]->asl + "^" + v[findu(v, p, i)]->asl + ")*((" + v[findu(v, p, i)]->output + ")*Ln(" + v[findu(v, k, i)]->asl + ")" + "+((" + v[findu(v, k, i)]->output + "/" + v[findu(v, k, i)]->asl + ")*" + v[findu(v, p, i)]->asl + ")))";
 				}
 				break;
 			case '*':
