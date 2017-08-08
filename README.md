@@ -1,5 +1,4 @@
 # Symbolic_Derivation
-## Summary:
 This program demonstrates symbolic derivation from variety of mathematical functions.
 ### Supported mathematical functions:
 Parentheses,Sine,Cosine,Tangent,Cotangent,Square,Ln,f(u),u^v,(All operators supported->*,/,+,-,^).
